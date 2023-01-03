@@ -7,6 +7,8 @@ public class Movement : MonoBehaviour
     public CharacterController controller;
 
     public float speed = 12f;
+    float startSpeed;
+    float prevSpeed;
     public float gravity = -9.81f;
     public float jumpHeight = 3f;
 
@@ -17,8 +19,35 @@ public class Movement : MonoBehaviour
     Vector3 velocity;
     bool isGrounded;
 
+    void Start()
+    {
+        startSpeed = speed;
+    }
+
     void Update()
     {
+        if (Input.GetButtonDown("Sprint"))
+        {
+            speed = startSpeed * 1.5f;
+        }
+        else if (Input.GetButtonUp("Sprint"))
+        {
+            speed = startSpeed;
+        }
+
+        prevSpeed = speed;
+
+        if (Input.GetButtonDown("Sneak"))
+        {
+            transform.localScale = new Vector3(1f, 0.5f, 1f);
+            speed = prevSpeed / 2;
+        }
+        else if (Input.GetButtonUp("Sneak"))
+        {
+            transform.localScale = new Vector3(1f, 1f, 1f);
+            speed = prevSpeed;
+        }
+
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
         if(isGrounded && velocity.y < 0)
