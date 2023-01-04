@@ -27,13 +27,13 @@ public class Movement : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetButtonDown("Sprint") &&! isSneaked)
+        if (Input.GetButtonDown("Sprint") )
         {
-            speed = startSpeed * 1.5f;
+            speed = speed * 1.5f;
         }
-        else if (Input.GetButtonUp("Sprint") &&! isSneaked)
+        else if (Input.GetButtonUp("Sprint")) 
         {
-            speed = startSpeed;
+            speed = speed/1.5f;
         }
 
         
@@ -41,13 +41,13 @@ public class Movement : MonoBehaviour
         if (Input.GetButtonDown("Sneak") && isSneaked == false)
         {
             transform.localScale = new Vector3(1f, 0.5f, 1f);
-            speed = startSpeed / 2;
+            speed = speed / 2;
             isSneaked = true;
         }   
         if (Input.GetButtonUp("Sneak"))
         {
             transform.localScale = new Vector3(1f, 1f, 1f);
-            speed = startSpeed;
+            speed = speed*2;
             isSneaked = false;
             
         }
