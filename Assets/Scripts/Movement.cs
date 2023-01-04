@@ -1,4 +1,4 @@
-using System.Collections;
+ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,46 +6,50 @@ public class Movement : MonoBehaviour
 {
     public CharacterController controller;
 
-    public float speed = 12f;
-    float startSpeed;
+    public float speed;
+    static float startSpeed = 12f;
     float prevSpeed;
     public float gravity = -9.81f;
     public float jumpHeight = 3f;
 
-    public Transform groundCheck;
+    public Transform groundCheck; 
     public float groundDistance = 0.4f;
     public LayerMask groundMask;
 
     Vector3 velocity;
     bool isGrounded;
-
+    bool isSneaked;
+    
     void Start()
     {
-        startSpeed = speed;
+        speed = startSpeed;
     }
 
     void Update()
     {
-        if (Input.GetButtonDown("Sprint"))
+        if (Input.GetButtonDown("Sprint") &&! isSneaked)
         {
             speed = startSpeed * 1.5f;
         }
-        else if (Input.GetButtonUp("Sprint"))
+        else if (Input.GetButtonUp("Sprint") &&! isSneaked)
         {
             speed = startSpeed;
         }
 
-        prevSpeed = speed;
+        
 
-        if (Input.GetButtonDown("Sneak"))
+        if (Input.GetButtonDown("Sneak") && isSneaked == false)
         {
             transform.localScale = new Vector3(1f, 0.5f, 1f);
-            speed = prevSpeed / 2;
-        }
-        else if (Input.GetButtonUp("Sneak"))
+            speed = startSpeed / 2;
+            isSneaked = true;
+        }   
+        if (Input.GetButtonUp("Sneak"))
         {
             transform.localScale = new Vector3(1f, 1f, 1f);
-            speed = prevSpeed;
+            speed = startSpeed;
+            isSneaked = false;
+            
         }
 
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
