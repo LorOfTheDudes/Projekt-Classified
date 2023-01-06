@@ -19,6 +19,7 @@ public class Movement : MonoBehaviour
     Vector3 velocity;
     bool isGrounded;
     bool isSneaked;
+    bool sneekPressed;
     
     void Start()
     {
@@ -43,16 +44,23 @@ public class Movement : MonoBehaviour
             transform.localScale = new Vector3(1f, 0.5f, 1f);
             speed = speed / 2;
             isSneaked = true;
-        }   
+            sneekPressed = true;
+        }
         if (Input.GetButtonUp("Sneak"))
         {
-            transform.localScale = new Vector3(1f, 1f, 1f);
-            speed = speed*2;
-            isSneaked = false;
+            sneekPressed = false;
             
+           
         }
 
-        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+        else if (!Physics.Raycast(new Vector3(transform.position.x, transform.position.y, transform.position.z), Vector3.up, 1.6f, groundMask) && isSneaked && !sneekPressed)
+        {
+            transform.localScale = new Vector3(1f, 1f, 1f);
+            speed = speed * 2;
+            isSneaked = false;
+        }
+
+            isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
         if(isGrounded && velocity.y < 0)
         {
